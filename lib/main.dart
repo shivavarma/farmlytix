@@ -10,9 +10,14 @@ class FarmlytixApp extends StatelessWidget {
     return MaterialApp(
       title: 'Farmlytix',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        useMaterial3: true,
         fontFamily: 'Roboto',
         scaffoldBackgroundColor: Colors.grey[50],
+        textTheme: const TextTheme(
+          titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
       ),
       home: RoleSelectionScreen(),
     );
@@ -115,7 +120,10 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   ),
                 ),
                 SizedBox(height: 24),
-                Text("Select your role:", style: TextStyle(fontSize: 18)),
+                Text(
+                  "Select your role:",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
                 DropdownButton<String>(
                   value: selectedRole,
                   isExpanded: true,
@@ -135,7 +143,10 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   },
                 ),
                 SizedBox(height: 16),
-                Text("Choose a sample question:", style: TextStyle(fontSize: 18)),
+                Text(
+                  "Choose a sample question:",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
                 DropdownButton<String>(
                   value: selectedQuestion,
                   isExpanded: true,
@@ -160,18 +171,30 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                       title = response?["title"] ?? "No Data";
                       detail = response?["detail"] ?? "No matching use case found for your role.";
                     });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Response updated')),
+                    );
                   },
-                  child: Text("Submit"),
+                  child: const Text("Submit"),
                 ),
                 SizedBox(height: 24),
                 if (title != null && detail != null)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title!, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 8),
-                      Text(detail!),
-                    ],
+                  Card(
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title!,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          SizedBox(height: 8),
+                          Text(detail!),
+                        ],
+                      ),
+                    ),
                   )
               ],
             ),
